@@ -70,42 +70,32 @@
 
   <!-- Firebase + Firestore + Telegram -->
   <script type="module">
-    // 1) Firebase SDK (модульный CDN)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // 2) ТВОЯ конфигурация Firebase — ВСТАВЬ СВОЮ
-    // Зайди в Firebase → Project settings → Your apps → Web → SDK setup and configuration
-    // и замени объект ниже на свой firebaseConfig.
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyA3XwM-qceM1_uMuK7NpTa7RKQyAyQw1Ws",
-  authDomain: "reprincev-b73c7.firebaseapp.com",
-  projectId: "reprincev-b73c7",
-  storageBucket: "reprincev-b73c7.firebasestorage.app",
-  messagingSenderId: "616952094737",
-  appId: "1:616952094737:web:82f22ef07d9f13309911b0",
-  measurementId: "G-8WFHS344GZ"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3XwM-qceM1_uMuK7NpTa7RKQyAyQw1Ws",
+      authDomain: "reprincev-b73c7.firebaseapp.com",
+      projectId: "reprincev-b73c7",
+      storageBucket: "reprincev-b73c7.firebasestorage.app",
+      messagingSenderId: "616952094737",
+      appId: "1:616952094737:web:82f22ef07d9f13309911b0",
+      measurementId: "G-8WFHS344GZ"
+    };
 
     const app = initializeApp(firebaseConfig);
     const db  = getFirestore(app);
 
-    // 3) Настрой Telegram. ЗАМЕНИ ПЛЕЙСХОЛДЕРЫ.
-    // Получи токен у @BotFather и свой chat_id (см. инструкции ниже).
-    const TG_BOT_TOKEN = "PASTE_YOUR_BOT_TOKEN_HERE";   // напр. 1234567890:AA...
-    const TG_CHAT_ID   = "PASTE_YOUR_CHAT_ID_HERE";     // напр. 123456789
+    const TG_BOT_TOKEN = "8289814455:AAEtbowPOjZ3PTip5WmBgU64y3yhm2QTmZ0";
+    const TG_CHAT_ID   = "5194745946";
 
-    // Утилита форматирования телефона
     const clean = s => (s || "").toString().trim();
     const $ = id => document.getElementById(id);
 
-    // Ставим сегодняшнюю дату по умолчанию
     const today = new Date();
     $("date").value = today.toISOString().slice(0,10);
 
     async function sendToTelegram(text) {
-      if (!TG_BOT_TOKEN || !TG_CHAT_ID) return; // тихо выходим, если не настроено
       const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
       await fetch(url, {
         method: "POST",
@@ -142,14 +132,12 @@ const firebaseConfig = {
           btn.disabled = false; return;
         }
 
-        // 4) Пишем в Firestore (коллекция Trainings)
         await addDoc(collection(db, "Trainings"), {
           name, phone, date, time, note,
           createdAt: serverTimestamp(),
           status: "new"
         });
 
-        // 5) Отправляем тебе в Telegram
         const tgText =
           `🆕 <b>Новая запись</b>\n` +
           `👤 Имя: ${name}\n` +
