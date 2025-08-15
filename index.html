@@ -7,7 +7,7 @@
   <style>
     body{margin:0;background:#f6f6f6;color:#111;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
     .wrap{max-width:1120px;margin:14px auto;padding:0 12px}
-    .bar{position:sticky;top:0;z-index:10;display:flex;gap:8;align-items:center;justify-content:space-between;
+    .bar{position:sticky;top:0;z-index:10;display:flex;gap:8px;align-items:center;justify-content:space-between;
          background:rgba(255,255,255,.9);border-bottom:1px solid #eee;padding:10px 12px;backdrop-filter:blur(6px)}
     .grid{display:grid;grid-template-columns:1fr 2fr;gap:12px}
     .card{background:#fff;border:1px solid #e5e5e5;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
@@ -31,7 +31,7 @@
 <body>
   <div class="bar">
     <b>Приложение тренера</b>
-    <div style="display:flex;gap:6">
+    <div style="display:flex;gap:6px">
       <button class="btnL" onclick="window.setView('list')">Список</button>
       <button class="btnL" onclick="window.setView('stats')">Статистика</button>
     </div>
@@ -154,7 +154,7 @@
       }));
     };
 
-    /* ---- views ---- */
+    /* ---- list ---- */
     function SessionTable(){
       const rows=[...sessions].sort((a,b)=>new Date(a.start)-new Date(b.start));
       const name=(id)=>clients.find(c=>c.id===id)?.name||"?";
@@ -194,13 +194,20 @@
                   </tr>
                 );
               })}
-              {rows.length===0 && <tr><td colSpan="6" style="text-align:center;color:#666">Пока нет тренировок</td></tr>}
+              {rows.length===0 && (
+                <tr>
+                  <td colSpan={6} style={{ textAlign: "center", color: "#666" }}>
+                    Пока нет тренировок
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
       );
     }
 
+    /* ---- stats ---- */
     function Stats(){
       const totalRevenue = sessions.reduce((sum,s)=>sum+(s.rate||0),0);
       const byClient=new Map();
@@ -224,9 +231,20 @@
                 {rows.map(r=>{
                   const c=clients.find(x=>x.name===r.name);
                   const pkg=c?.package?`${c.package.left}/${c.package.size} • ${c.package.price} ₽`:"—";
-                  return <tr key={r.name}><td>{r.name}</td><td>{r.attended||0}</td><td>{r.missed||0}</td><td>{r.planned||0}</td><td>{r.canceled||0}</td><td>{pkg}</td></tr>
+                  return (
+                    <tr key={r.name}>
+                      <td>{r.name}</td><td>{r.attended||0}</td><td>{r.missed||0}</td>
+                      <td>{r.planned||0}</td><td>{r.canceled||0}</td><td>{pkg}</td>
+                    </tr>
+                  );
                 })}
-                {rows.length===0 && <tr><td colSpan="6" style="text-align:center;color:#666">Нет данных</td></tr>}
+                {rows.length===0 && (
+                  <tr>
+                    <td colSpan={6} style={{ textAlign: "center", color: "#666" }}>
+                      Нет данных
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -245,9 +263,10 @@
               <button className="btn" onClick={addClient}>+ Добавить</button>
             </div>
             <div style={{display:"grid",gap:8,maxHeight:360,overflow:"auto"}}>
-              {clients.filter(c=>[c.name,c.phone,c.note].join(" ").toLowerCase().includes(q.toLowerCase()))
+              {clients
+                .filter(c=>[c.name,c.phone,c.note].join(" ").toLowerCase().includes(q.toLowerCase()))
                 .map(c=>(
-                <div key={c.id} className="card" style="padding:10px">
+                <div key={c.id} className="card" style={{ padding: 10 }}>
                   <div style={{fontWeight:600}}>{c.name}</div>
                   {c.phone && <div className="muted">{c.phone}</div>}
                   {c.package && <div className="muted">Пакет: {c.package.left}/{c.package.size} • {c.package.price} ₽</div>}
@@ -267,7 +286,7 @@
           </div>
         </div>
 
-        <div style={{display:"grid",gap:12"}}>
+        <div style={{display:"grid",gap:12}}>
           {view==="list"  && <div className="card"><div className="ttl">Все тренировки</div><SessionTable/></div>}
           {view==="stats" && <Stats/>}
         </div>
