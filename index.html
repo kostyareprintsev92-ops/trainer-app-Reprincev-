@@ -6,10 +6,13 @@
   <title>Приложение тренера</title>
   <style>
     :root { --bg:#f6f6f6; --card:#fff; --muted:#7d7d7d; --text:#111; }
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    *{box-sizing:border-box} 
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
     .wrap{max-width:900px;margin:20px auto;padding:0 16px}
-    .bar{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.9);backdrop-filter:saturate(150%) blur(6px);border-bottom:1px solid #eaeaea}
-    .bar-in{max-width:900px;margin:0 auto;padding:12px 16px}
+    .bar{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:saturate(150%) blur(6px);border-bottom:1px solid #eaeaea}
+    .bar-in{max-width:900px;margin:0 auto;display:flex;align-items:center;padding:8px 16px}
+    .bar-in img{height:40px;width:auto;border-radius:50%;margin-right:12px}
+    .bar-in span{font-size:16px;font-weight:700;white-space:nowrap}
     h1{font-size:20px;margin:0;font-weight:700}
     .card{background:var(--card);border:1px solid #eaeaea;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.03)}
     .ttl{font-weight:700;margin-bottom:8px}
@@ -19,6 +22,7 @@
     .btn{padding:12px 16px;border-radius:10px;border:0;font-weight:700;font-size:16px}
     .btn.primary{background:#111;color:#fff}
     .btn:disabled{opacity:.6}
+    .btn.call{background:#d11;color:#fff;display:block;text-align:center;text-decoration:none}
     .muted{color:var(--muted);font-size:14px}
     #msg{display:none;padding:10px;border-radius:8px;margin-top:12px}
     #msg.ok{display:block;background:#e9f7ef;color:#0a7a3f;border:1px solid #bde5c8}
@@ -27,12 +31,11 @@
   </style>
 </head>
 <body>
-  <div style="text-align:center; margin-top:20px;">
-    <img src="./Logo.png?v=2" alt="Логотип" style="width:100px; height:auto; border-radius:50%;">
-</div>
+  <!-- Шапка с логотипом и девизом -->
   <div class="bar">
     <div class="bar-in">
-      <h1>Приложение тренера</h1>
+      <img src="Logo.png" alt="Логотип">
+      <span>Ваша цель = моя работа!</span>
     </div>
   </div>
 
@@ -62,6 +65,9 @@
         <textarea id="note" class="in" placeholder="Комментарий (необязательно)" style="margin-top:12px;height:90px"></textarea>
 
         <button id="submitBtn" class="btn primary" type="submit" style="margin-top:14px">Записаться</button>
+        <!-- Кнопка "Позвонить" -->
+        <a href="tel:+79270137211" class="btn call" style="margin-top:10px;">📞 Позвонить</a>
+
         <div id="msg"></div>
       </form>
 
