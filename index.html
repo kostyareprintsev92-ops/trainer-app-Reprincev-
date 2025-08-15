@@ -2,133 +2,68 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Запись на тренировку</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Приложение тренера</title>
   <style>
-    :root { --bg:#0f1115; --card:#171a21; --text:#e8ecf1; --sub:#aab3c5; --acc:#4da3ff; --ok:#22c55e; --err:#ef4444; }
-    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
-    .wrap{max-width:800px;margin:24px auto;padding:0 14px}
-    .bar{position:sticky;top:0;z-index:5;background:rgba(15,17,21,.8);backdrop-filter:blur(10px);border-bottom:1px solid #222}
-    .bar .wrap{display:flex;gap:10px;align-items:center;padding:10px 14px}
-    .ttl{font-weight:700}
-    .tab{margin-left:auto;display:flex;gap:8px}
-    .btn{padding:8px 14px;border:1px solid #2a2f3a;border-radius:10px;background:#1b2030;color:var(--text);cursor:pointer}
-    .btn:hover{border-color:#3b4252}
-    .btn-acc{background:#1c2434;border-color:#29425c}
-    .btn-ok{background:#13301f;border-color:#1e4d2f}
-    .card{background:var(--card);border:1px solid #22262f;border-radius:14px;padding:16px;margin-top:16px}
-    .sub{color:var(--sub);font-size:14px}
-    label{display:block;font-size:13px;color:var(--sub);margin:10px 0 6px}
-    input,textarea,select{width:100%;padding:12px;border:1px solid #2a2f3a;border-radius:10px;background:#111522;color:var(--text)}
-    textarea{min-height:80px;resize:vertical}
-    .row{display:grid;grid-template-columns:1fr;gap:12px}
-    @media(min-width:560px){ .row{grid-template-columns:1fr 1fr} }
-    .msg{margin-top:10px;font-size:14px}
-    .ok{color:var(--ok)} .err{color:var(--err)}
-    .list{display:grid;gap:8px;margin-top:8px}
-    .item{border:1px solid #252a35;border-radius:12px;padding:12px;background:#121623}
-    .muted{color:#9aa6b2;font-size:13px}
-    .pill{display:inline-block;padding:2px 8px;border:1px solid #2a2f3a;border-radius:999px;margin-left:6px;font-size:12px;color:#aab3c5}
-    .hint{font-size:13px;color:#9aa6b2}
+    :root { --bg:#f6f6f6; --card:#fff; --txt:#111; --muted:#666; --pri:#111; }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Arial}
+    .wrap{max-width:900px;margin:20px auto;padding:0 14px}
+    .bar{position:sticky;top:0;z-index:10;background:#fff8;backdrop-filter: blur(6px);border-bottom:1px solid #e6e6e6}
+    .bar-in{max-width:900px;margin:0 auto;padding:10px 14px;display:flex;gap:8px;align-items:center}
+    h1{font-size:20px;margin:0;font-weight:800}
+    .card{background:var(--card);border:1px solid #e7e7e7;border-radius:12px;padding:14px}
+    .grid{display:grid;gap:14px}
+    .ttl{font-weight:700;margin-bottom:6px}
+    .in{padding:10px 12px;border:1px solid #d9d9d9;border-radius:10px;background:#fff}
+    .btn{padding:10px 14px;border-radius:10px;border:1px solid #111;background:#111;color:#fff;cursor:pointer}
+    .muted{color:var(--muted);font-size:14px}
+    #msg{display:none;padding:10px;border-radius:10px;background:#e9fbe9;border:1px solid #bde5bd}
+    .footer{margin-top:24px;color:#888;font-size:13px;text-align:center}
   </style>
 </head>
 <body>
   <div class="bar">
-    <div class="wrap">
-      <div class="ttl">Приложение тренера</div>
-      <div class="tab">
-        <button id="tab-book" class="btn btn-acc">Записаться</button>
-        <button id="tab-admin" class="btn">Админ</button>
-      </div>
+    <div class="bar-in">
+      <h1>Приложение тренера</h1>
     </div>
   </div>
 
-  <div class="wrap">
-    <!-- Блок записи клиента -->
-    <div id="view-book" class="card">
-      <div class="ttl" style="margin-bottom:6px">Запись на тренировку</div>
-      <div class="sub">Заполните форму — мы подтвердим запись.</div>
-      <div style="margin-top:10px"></div>
+  <div class="wrap grid">
+    <!-- Форма записи клиента -->
+    <div class="card">
+      <div class="ttl">Записаться на тренировку</div>
+      <div class="muted" style="margin-bottom:8px">Оставьте данные — я подтвержу запись и свяжусь с вами.</div>
 
-      <div class="row">
-        <div>
-          <label>Имя и фамилия</label>
-          <input id="f-name" placeholder="Например, Иван Петров" />
-        </div>
-        <div>
-          <label>Телефон</label>
-          <input id="f-phone" placeholder="+7 999 123-45-67" />
-        </div>
-      </div>
-
-      <div class="row">
-        <div>
-          <label>Дата</label>
-          <input id="f-date" type="date" />
-        </div>
-        <div>
-          <label>Время</label>
-          <input id="f-time" type="time" />
-        </div>
-      </div>
-
-      <div>
-        <label>Комментарий (необязательно)</label>
-        <textarea id="f-note" placeholder="Уровень, пожелания и т. п."></textarea>
-      </div>
-
-      <div style="display:flex;gap:10px;align-items:center;margin-top:12px">
-        <button id="btn-send" class="btn btn-ok">Отправить заявку</button>
-        <span id="send-msg" class="msg"></span>
-      </div>
-
-      <div class="hint" style="margin-top:12px">
-        Нажимая «Отправить», вы соглашаетесь на обработку данных для записи на тренировку.
-      </div>
+      <form id="signupForm" class="grid" style="grid-template-columns:1fr;max-width:520px">
+        <input id="name" class="in" type="text" placeholder="Имя" required />
+        <input id="phone" class="in" type="tel" placeholder="Телефон" required />
+        <input id="date" class="in" type="date" required />
+        <select id="time" class="in" required>
+          <option value="" disabled selected>Время</option>
+          <option>07:00</option><option>08:00</option><option>09:00</option>
+          <option>18:00</option><option>19:00</option><option>20:00</option>
+        </select>
+        <input id="comment" class="in" type="text" placeholder="Комментарий (необязательно)" />
+        <button class="btn" type="submit">Записаться</button>
+        <div id="msg">Заявка отправлена 👍</div>
+      </form>
     </div>
 
-    <!-- Блок админа (скрыт, пока не введён код) -->
-    <div id="view-admin" class="card" style="display:none">
-      <div class="ttl" style="margin-bottom:6px">Заявки клиентов <span id="count" class="pill">0</span></div>
-      <div class="sub">Этот раздел виден только вам. Временно защищён кодом. Позже сделаем вход и правила Firestore.</div>
-
-      <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
-        <input id="admin-code" placeholder="Введите админ-код и нажмите «Войти»" />
-        <button id="btn-login" class="btn btn-acc">Войти</button>
-        <span id="login-msg" class="msg"></span>
-      </div>
-
-      <div id="admin-panel" style="display:none">
-        <div class="row" style="margin-top:12px">
-          <div>
-            <label>Фильтр по дате (с)</label>
-            <input id="filter-from" type="date" />
-          </div>
-          <div>
-            <label>Фильтр по дате (по)</label>
-            <input id="filter-to" type="date" />
-          </div>
-        </div>
-        <button id="btn-refresh" class="btn" style="margin-top:10px">Обновить список</button>
-        <div id="list" class="list"></div>
-      </div>
+    <div class="footer">
+      Сделано для быстрой записи клиентов. Данные сохраняются в Cloud Firestore.
     </div>
   </div>
 
-  <!-- Firebase + логика -->
+  <!-- Firebase + Firestore (модульный SDK) -->
   <script type="module">
-    // ====== НАСТРОЙКИ (можно менять) ======
-    const ADMIN_KEY = "reprincev"; // временный код для входа в админ-режим
-    const COLLECTION = "trainings"; // коллекция в Firestore
-
-    // ====== Firebase SDK (без npm, прямо из CDN) ======
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    // Импорт SDK Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import {
-      getFirestore, collection, addDoc, serverTimestamp,
-      query, orderBy, getDocs, where
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+      getFirestore, collection, addDoc, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // ТВОЙ конфиг (из консоли Firebase)
+    // Твоя конфигурация из Firebase (оставил твою)
     const firebaseConfig = {
       apiKey: "AIzaSyA3XwM-qceM1_uMuK7NpTa7RKQyAyQw1Ws",
       authDomain: "reprincev-b73c7.firebaseapp.com",
@@ -139,142 +74,43 @@
       measurementId: "G-8WFHS344GZ"
     };
 
+    // Инициализация
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const db  = getFirestore(app);
 
-    // ====== UI ======
-    const $ = (id) => document.getElementById(id);
-    const viewBook = $("view-book");
-    const viewAdmin = $("view-admin");
-    const tabBook = $("tab-book");
-    const tabAdmin = $("tab-admin");
+    // Логика формы
+    const form = document.getElementById('signupForm');
+    const msg  = document.getElementById('msg');
 
-    tabBook.onclick = () => { viewBook.style.display = ""; viewAdmin.style.display = "none"; };
-    tabAdmin.onclick = () => { viewBook.style.display = "none"; viewAdmin.style.display = ""; };
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-    // ====== Отправка заявки ======
-    const fName = $("f-name");
-    const fPhone = $("f-phone");
-    const fDate = $("f-date");
-    const fTime = $("f-time");
-    const fNote = $("f-note");
-    const sendBtn = $("btn-send");
-    const sendMsg = $("send-msg");
+      const name    = document.getElementById('name').value.trim();
+      const phone   = document.getElementById('phone').value.trim();
+      const date    = document.getElementById('date').value; // yyyy-mm-dd
+      const time    = document.getElementById('time').value;
+      const comment = document.getElementById('comment').value.trim();
 
-    sendBtn.onclick = async () => {
-      sendMsg.textContent = "";
-      const name = fName.value.trim();
-      const phone = fPhone.value.trim();
-      const date = fDate.value;
-      const time = fTime.value;
-      const note = fNote.value.trim();
-
-      if (!name || !phone || !date || !time) {
-        sendMsg.textContent = "Заполните имя, телефон, дату и время.";
-        sendMsg.className = "msg err";
-        return;
-      }
-
-      sendBtn.disabled = true;
-      sendBtn.textContent = "Отправка...";
+      if (!name || !phone || !date || !time) return;
 
       try {
-        await addDoc(collection(db, COLLECTION), {
-          name, phone, date, time, note,
+        await addDoc(collection(db, "Trainings"), {
+          name, phone, date, time, comment,
+          status: "new",
           createdAt: serverTimestamp()
         });
-        sendMsg.textContent = "Заявка отправлена! Мы свяжемся для подтверждения.";
-        sendMsg.className = "msg ok";
-        fName.value = fPhone.value = fNote.value = "";
-        // дату/время оставим как есть, чтобы было удобно отправлять ещё одну
-      } catch (e) {
-        console.error(e);
-        sendMsg.textContent = "Ошибка отправки. Проверьте интернет и попробуйте ещё раз.";
-        sendMsg.className = "msg err";
-      } finally {
-        sendBtn.disabled = false;
-        sendBtn.textContent = "Отправить заявку";
+
+        form.reset();
+        msg.textContent = "Заявка отправлена 👍";
+        msg.style.display = "block";
+        setTimeout(() => (msg.style.display = "none"), 2500);
+      } catch (err) {
+        console.error(err);
+        msg.textContent = "Ошибка отправки. Попробуйте ещё раз.";
+        msg.style.display = "block";
+        setTimeout(() => (msg.style.display = "none"), 3000);
       }
-    };
-
-    // ====== Админ: вход и список ======
-    const adminCode = $("admin-code");
-    const loginBtn = $("btn-login");
-    const loginMsg = $("login-msg");
-    const adminPanel = $("admin-panel");
-    const listBox = $("list");
-    const countPill = $("count");
-    const btnRefresh = $("btn-refresh");
-    const filterFrom = $("filter-from");
-    const filterTo = $("filter-to");
-
-    let adminOK = false;
-
-    loginBtn.onclick = () => {
-      if (adminCode.value.trim() === ADMIN_KEY) {
-        adminOK = true;
-        loginMsg.textContent = "Вход выполнен.";
-        loginMsg.className = "msg ok";
-        adminPanel.style.display = "";
-        refreshList();
-      } else {
-        loginMsg.textContent = "Неверный код.";
-        loginMsg.className = "msg err";
-        adminPanel.style.display = "none";
-      }
-    };
-
-    btnRefresh.onclick = () => adminOK && refreshList();
-
-    async function refreshList() {
-      listBox.innerHTML = "<div class='muted'>Загрузка...</div>";
-
-      try {
-        // Базовый запрос: по времени создания
-        let q = query(collection(db, COLLECTION), orderBy("createdAt", "desc"));
-
-        // Фильтр по дате (если заполнен)
-        const from = filterFrom.value;
-        const to = filterTo.value;
-
-        // Для простоты фильтруем уже полученные данные по полям date (YYYY-MM-DD)
-        const snap = await getDocs(q);
-        const rows = [];
-        snap.forEach(d => rows.push({ id: d.id, ...d.data() }));
-
-        const filtered = rows.filter(r => {
-          if (from && r.date < from) return false;
-          if (to && r.date > to) return false;
-          return true;
-        });
-
-        countPill.textContent = filtered.length;
-
-        if (!filtered.length) {
-          listBox.innerHTML = "<div class='muted'>Пока нет заявок.</div>";
-          return;
-        }
-
-        listBox.innerHTML = "";
-        filtered.forEach(r => {
-          const el = document.createElement("div");
-          el.className = "item";
-          el.innerHTML = `
-            <div><b>${escapeHtml(r.name || "-")}</b> <span class="muted">(${escapeHtml(r.phone || "-")})</span></div>
-            <div class="muted" style="margin-top:4px">Когда: ${escapeHtml(r.date || "-")} в ${escapeHtml(r.time || "-")}</div>
-            ${r.note ? `<div style="margin-top:6px">${escapeHtml(r.note)}</div>` : ""}
-          `;
-          listBox.appendChild(el);
-        });
-      } catch (e) {
-        console.error(e);
-        listBox.innerHTML = "<div class='err'>Ошибка загрузки списка.</div>";
-      }
-    }
-
-    function escapeHtml(s=""){
-      return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-    }
+    });
   </script>
 </body>
 </html>
