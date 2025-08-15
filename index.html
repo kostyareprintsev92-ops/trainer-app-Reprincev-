@@ -5,21 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Приложение тренера</title>
   <style>
-    :root { --bg:#f6f6f6; --card:#fff; --txt:#111; --muted:#666; --pri:#111; }
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Arial}
-    .wrap{max-width:900px;margin:20px auto;padding:0 14px}
-    .bar{position:sticky;top:0;z-index:10;background:#fff8;backdrop-filter: blur(6px);border-bottom:1px solid #e6e6e6}
-    .bar-in{max-width:900px;margin:0 auto;padding:10px 14px;display:flex;gap:8px;align-items:center}
-    h1{font-size:20px;margin:0;font-weight:800}
-    .card{background:var(--card);border:1px solid #e7e7e7;border-radius:12px;padding:14px}
-    .grid{display:grid;gap:14px}
-    .ttl{font-weight:700;margin-bottom:6px}
-    .in{padding:10px 12px;border:1px solid #d9d9d9;border-radius:10px;background:#fff}
-    .btn{padding:10px 14px;border-radius:10px;border:1px solid #111;background:#111;color:#fff;cursor:pointer}
-    .muted{color:var(--muted);font-size:14px}
-    #msg{display:none;padding:10px;border-radius:10px;background:#e9fbe9;border:1px solid #bde5bd}
-    .footer{margin-top:24px;color:#888;font-size:13px;text-align:center}
+    :root { --bg:#f6f6f6; --card:#fff; --txt:#111; --muted:#666; --accent:#000; }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--bg); color:var(--txt); font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
+    .wrap{max-width:900px; margin:20px auto; padding:0 16px;}
+    .bar{position:sticky; top:0; z-index:10; background:rgba(255,255,255,.9); border-bottom:1px solid #e9e9e9; backdrop-filter:saturate(180%) blur(10px)}
+    .bar-in{max-width:900px; margin:0 auto; padding:14px 16px;}
+    h1{font-size:22px; margin:0; font-weight:800;}
+    .card{background:var(--card); border:1px solid #e9e9e9; border-radius:14px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    .ttl{font-weight:800; font-size:18px; margin-bottom:12px}
+    label{display:block; font-size:13px; color:#666; margin:10px 0 6px}
+    input, select, textarea{
+      width:100%; padding:12px 14px; border:1px solid #ddd; border-radius:10px; font-size:16px; background:#fff;
+    }
+    textarea{min-height:90px; resize:vertical}
+    .row{display:grid; gap:12px; grid-template-columns:1fr}
+    @media(min-width:640px){ .row{ grid-template-columns:1fr 1fr } }
+    .btn{display:block; width:100%; margin-top:14px; padding:14px 18px; border-radius:12px; border:0; background:#111; color:#fff; font-weight:800; font-size:16px; cursor:pointer}
+    .btn:disabled{opacity:.5; cursor:not-allowed}
+    #msg{display:none; padding:10px 12px; border-radius:10px; margin-top:10px; font-size:14px}
+    .ok{background:#e8f7ee; color:#0b7a3b; border:1px solid #bfe7cf}
+    .err{background:#fdeaea; color:#a11; border:1px solid #f6caca}
+    footer{margin:32px auto; color:#888; font-size:13px; text-align:center}
   </style>
 </head>
 <body>
@@ -29,41 +36,53 @@
     </div>
   </div>
 
-  <div class="wrap grid">
-    <!-- Форма записи клиента -->
+  <div class="wrap">
     <div class="card">
       <div class="ttl">Записаться на тренировку</div>
-      <div class="muted" style="margin-bottom:8px">Оставьте данные — я подтвержу запись и свяжусь с вами.</div>
+      <p style="margin:0 0 14px;color:#666">Оставьте данные — я подтвержу запись и свяжусь с вами.</p>
 
-      <form id="signupForm" class="grid" style="grid-template-columns:1fr;max-width:520px">
-        <input id="name" class="in" type="text" placeholder="Имя" required />
-        <input id="phone" class="in" type="tel" placeholder="Телефон" required />
-        <input id="date" class="in" type="date" required />
-        <select id="time" class="in" required>
-          <option value="" disabled selected>Время</option>
-          <option>07:00</option><option>08:00</option><option>09:00</option>
-          <option>18:00</option><option>19:00</option><option>20:00</option>
-        </select>
-        <input id="comment" class="in" type="text" placeholder="Комментарий (необязательно)" />
-        <button class="btn" type="submit">Записаться</button>
-        <div id="msg">Заявка отправлена 👍</div>
+      <form id="form">
+        <label for="name">Имя</label>
+        <input id="name" name="name" placeholder="Иван" required />
+
+        <label for="phone">Телефон</label>
+        <input id="phone" name="phone" inputmode="tel" placeholder="+7 999 123-45-67" required />
+
+        <div class="row">
+          <div>
+            <label for="date">Дата</label>
+            <input id="date" name="date" type="date" required />
+          </div>
+          <div>
+            <label for="time">Время</label>
+            <select id="time" name="time" required>
+              <option value="" disabled selected>Выберите время</option>
+              <option>08:00</option><option>09:00</option><option>10:00</option>
+              <option>11:00</option><option>12:00</option><option>13:00</option>
+              <option>14:00</option><option>15:00</option><option>16:00</option>
+              <option>17:00</option><option>18:00</option><option>19:00</option>
+              <option>20:00</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="comment">Комментарий (необязательно)</label>
+        <textarea id="comment" name="comment" placeholder="Например: первая тренировка / предпочитаю звонок"></textarea>
+
+        <button class="btn" id="submitBtn" type="submit">Записаться</button>
+        <div id="msg"></div>
       </form>
     </div>
 
-    <div class="footer">
-      Сделано для быстрой записи клиентов. Данные сохраняются в Cloud Firestore.
-    </div>
+    <footer>Сделано для быстрой записи клиентов. Данные сохраняются в Cloud Firestore.</footer>
   </div>
 
-  <!-- Firebase + Firestore (модульный SDK) -->
+  <!-- Firebase (модульный SDK через CDN) -->
   <script type="module">
-    // Импорт SDK Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import {
-      getFirestore, collection, addDoc, serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // Твоя конфигурация из Firebase (оставил твою)
+    // 🔑 ТВОИ ключи (замени при необходимости на свои)
     const firebaseConfig = {
       apiKey: "AIzaSyA3XwM-qceM1_uMuK7NpTa7RKQyAyQw1Ws",
       authDomain: "reprincev-b73c7.firebaseapp.com",
@@ -78,37 +97,57 @@
     const app = initializeApp(firebaseConfig);
     const db  = getFirestore(app);
 
-    // Логика формы
-    const form = document.getElementById('signupForm');
+    // Установка сегодняшней даты по умолчанию
+    const dateInput = document.getElementById('date');
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth()+1).padStart(2,'0');
+    const dd = String(today.getDate()).padStart(2,'0');
+    dateInput.value = `${yyyy}-${mm}-${dd}`;
+
+    // Работа формы
+    const form = document.getElementById('form');
+    const btn  = document.getElementById('submitBtn');
     const msg  = document.getElementById('msg');
 
-    form.addEventListener('submit', async (e) => {
+    function showMsg(text, ok=true){
+      msg.textContent = text;
+      msg.className = ok ? 'ok' : 'err';
+      msg.id = 'msg';
+      msg.style.display = 'block';
+    }
+
+    form.addEventListener('submit', async (e)=>{
       e.preventDefault();
+      btn.disabled = true;
 
       const name    = document.getElementById('name').value.trim();
       const phone   = document.getElementById('phone').value.trim();
-      const date    = document.getElementById('date').value; // yyyy-mm-dd
+      const date    = document.getElementById('date').value;
       const time    = document.getElementById('time').value;
       const comment = document.getElementById('comment').value.trim();
 
-      if (!name || !phone || !date || !time) return;
+      if(!name || !phone || !date || !time){
+        showMsg('Пожалуйста, заполните обязательные поля.', false);
+        btn.disabled = false;
+        return;
+      }
 
-      try {
-        await addDoc(collection(db, "Trainings"), {
+      try{
+        await addDoc(collection(db, 'requests'), {
           name, phone, date, time, comment,
-          status: "new",
-          createdAt: serverTimestamp()
+          createdAt: serverTimestamp(),
+          status: 'new' // на будущее: new / confirmed / done
         });
 
+        showMsg('Заявка отправлена! Я свяжусь с вами для подтверждения ✅', true);
         form.reset();
-        msg.textContent = "Заявка отправлена 👍";
-        msg.style.display = "block";
-        setTimeout(() => (msg.style.display = "none"), 2500);
-      } catch (err) {
+        dateInput.value = `${yyyy}-${mm}-${dd}`;
+      }catch(err){
         console.error(err);
-        msg.textContent = "Ошибка отправки. Попробуйте ещё раз.";
-        msg.style.display = "block";
-        setTimeout(() => (msg.style.display = "none"), 3000);
+        showMsg('Не получилось отправить. Проверьте интернет и попробуйте ещё раз.', false);
+      }finally{
+        btn.disabled = false;
       }
     });
   </script>
